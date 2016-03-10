@@ -5,10 +5,10 @@
 
 void setup() {
     servo_setup();
-    i2c_setuo();
+    i2c_setup();
 }
 
 void loop() {
     delay(100);
-    i2c_loop()
+    i2c_loop();
 }

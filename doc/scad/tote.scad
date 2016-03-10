@@ -3,7 +3,7 @@ use <parts.scad>
 module leg(hip, knee, ankle, explode) {
     SG90_single_horn();
     translate([0, 0, explode]) SG90_horn_screw();
-    translate([0, 0, -explode * 2]) rotate(hip - 50 - 90) {
+    translate([0, 0, -explode * 2]) rotate(hip - 40) {
         rotate(0) SG90();
         translate([18, -22 - explode, -28.75]) rotate([90, 180, 90]) {
             SG90();
@@ -105,16 +105,16 @@ module body(explode) {
 }
 
 module robot(explode) {
-    translate([20.75, 20.75, -2.1 + explode]) rotate(175) mirror([0, 1, 0]) {
+    translate([20.75, 20.75, -2.1 + explode]) rotate(175) {
         leg(0, 0, 0, explode);
     }
-    translate([-20.75, -20.75, -2.1 + explode]) rotate(-5) mirror([0, 1, 0]) {
+    translate([-20.75, -20.75, -2.1 + explode]) rotate(-5) {
         leg(0, 0, 0, explode);
     }
-    translate([20.75, -20.75, -2.1 + explode]) rotate(-175) {
+    translate([20.75, -20.75, -2.1 + explode]) rotate(-175) mirror([0, 1, 0]) {
         leg(0, 0, 0, explode);
     }
-    translate([-20.75, 20.75, -2.1 + explode]) rotate(5) {
+    translate([-20.75, 20.75, -2.1 + explode]) rotate(5) mirror([0, 1, 0]) {
         leg(0, 0, 0, explode);
     }
     body(explode);
