@@ -1,5 +1,33 @@
 use <parts.scad>
 
+
+module coxa(explode) {
+    SG90();
+    translate([18, -22 - explode, -28.75]) rotate([90, 180, 90]) SG90();
+}
+
+module tibia(explode) {
+    SG90_single_horn();
+    translate([17.6, 0, 0]) {
+        translate([0, 0, 6 - explode]) rotate([0, 180, 0])
+            SG90_double_horn();
+        translate([-6, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
+            SG90_horn_screw();
+        translate([-12, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
+            SG90_horn_screw();
+        translate([6, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
+            SG90_horn_screw();
+        translate([12, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
+            SG90_horn_screw();
+    }
+    translate([35.2, 0, 0]) rotate([0, 0, 180]) SG90_single_horn();
+}
+
+module femur(explode) {
+    SG90();
+    translate([-3.1 - explode, -20, -15]) rotate([-90, 0, 90]) SG90_double_horn();
+}
+
 module leg(hip, knee, ankle, explode) {
     SG90_single_horn();
     translate([0, 0, explode]) SG90_horn_screw();
@@ -8,30 +36,11 @@ module leg(hip, knee, ankle, explode) {
         translate([18, -22 - explode, -28.75]) rotate([90, 180, 90]) {
             SG90();
             translate([0, 0, explode * 2]) rotate(knee) {
-                SG90_single_horn();
                 translate([0, 0, explode]) SG90_horn_screw();
-                translate([17.6, 0, 0]) {
-                    translate([0, 0, 6 - explode]) rotate([0, 180, 0])
-                        SG90_double_horn();
-                    translate([-6, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-                        SG90_horn_screw();
-                    translate([-12, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-                        SG90_horn_screw();
-                    translate([6, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-                        SG90_horn_screw();
-                    translate([12, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-                        SG90_horn_screw();
-                }
+                tibia(explode);
                 translate([35.2, 0, 0]) rotate([0, 0, 180]) {
-                    SG90_single_horn();
                     translate([0, 0, explode]) SG90_horn_screw();
-                    translate([0, 0, -explode * 2]) rotate(ankle) {
-                        SG90();
-                        translate([-3.1 - explode, -20, -15])
-                            rotate([-90, 0, 90]) {
-                                SG90_double_horn();
-                        }
-                    }
+                    translate([0, 0, -explode * 2]) rotate(ankle) femur(explode);
                 }
             }
         }
@@ -39,17 +48,35 @@ module leg(hip, knee, ankle, explode) {
 }
 
 module board() {
-    color("DimGray") difference() {
+    color("Black") difference() {
         hull() {
             translate([20.75, 20.75, 0]) cylinder(r=4, h=0.6, $fn=20);
             translate([-20.75, -20.75, 0]) cylinder(r=4, h=0.6, $fn=20);
             translate([20.75, -20.75, 0]) cylinder(r=4, h=0.6, $fn=20);
             translate([-20.75, 20.75, 0]) cylinder(r=4, h=0.6, $fn=20);
         }
-        translate([20.75, 20.75, -2]) cylinder(r=3.2, h=4, $fn=20);
-        translate([-20.75, -20.75, -2]) cylinder(r=3.2, h=4, $fn=20);
-        translate([20.75, -20.75, -2]) cylinder(r=3.2, h=4, $fn=20);
-        translate([-20.75, 20.75, -2]) cylinder(r=3.2, h=4, $fn=20);
+        translate([20.75, 20.75, -2]) {
+            cylinder(r=3.2, h=4, $fn=12);
+            translate([-6, 0.1, 0]) cylinder(r=0.6, h=4, $fn=8);
+            translate([-12, 0.2, 0]) cylinder(r=0.6, h=4, $fn=8);
+        }
+        translate([-20.75, -20.75, -2]) {
+            cylinder(r=3.2, h=4, $fn=12);
+            translate([6, -0.1, 0]) cylinder(r=0.6, h=4, $fn=8);
+            translate([12, -0.2, 0]) cylinder(r=0.6, h=4, $fn=8);
+        }
+        translate([20.75, -20.75, -2]) {
+            cylinder(r=3.2, h=4, $fn=12);
+            translate([-6, -0.1, 0]) cylinder(r=0.6, h=4, $fn=8);
+            translate([-12, -0.2, 0]) cylinder(r=0.6, h=4, $fn=8);
+        }
+        translate([-20.75, 20.75, -2]){
+            cylinder(r=3.2, h=4, $fn=12);
+            translate([6, 0.1, 0]) cylinder(r=0.6, h=4, $fn=8);
+            translate([12, 0.2, 0]) cylinder(r=0.6, h=4, $fn=8);
+        }
+    }
+    translate([20.75, 20.75, -2]) {
     }
 }
 
@@ -60,9 +87,9 @@ module components(explode) {
         translate([5, 6, 0 - explode]) rotate([0, 180, 0]) capacitor();
         translate([2.54 * -1, 2.54 * 9, 7 + explode]) rotate([180, 0, -90]) switch();
         for (x = [0:5]) for (y = [0:2]) {
-            translate([1.27 * 10 + 2.54 * x, 1.27 * 2.5 + 2.54 * y, 0.8 - explode])
+            translate([1.27 * 10 + 2.54 * x, 1.27 * 2.5 + 2.54 * y, 1.6 - explode])
                 rotate([0, 180, 0]) goldpin();
-            translate([1.27 * 10 + 2.54 * x, 1.27 * 23.5 + 2.54 * y, 0.8 - explode])
+            translate([1.27 * 10 + 2.54 * x, 1.27 * 23.5 + 2.54 * y, 1.6 - explode])
                 rotate([0, 180, 0]) goldpin();
         }
         translate([1.27 * 4, 1.27 * 2.5, -1.2]) color("Silver")
