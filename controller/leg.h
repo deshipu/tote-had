@@ -1,19 +1,10 @@
 #ifndef LEG_H
 #define LEG_H
 
-#ifdef TOTE2
-// For version 2:
 #define COXA    25.0
 #define FEMUR   42.0
 #define TIBIA   38.5
 #define BASE    21.0
-#else
-// For version 1:
-#define COXA    8.0
-#define FEMUR   20.5
-#define TIBIA   28.5
-#define BASE    18.5
-#endif
 
 const signed char LEG_X[4] = {-1, -1, 1, 1};
 const signed char LEG_Y[4] = {1, -1, -1, 1};
