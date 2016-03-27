@@ -1,4 +1,4 @@
-from machine import delay
+from pyb import delay
 
 
 class Creep:
@@ -26,8 +26,7 @@ class Creep:
         self.dy = 1
         self.rotation = 0
         self.spread = 0
-        leg = robot.legs[0]
-        self.height = leg.tibia
+        self.height = 0
         self.last_leg = 0
 
     def move(self):
@@ -51,10 +50,8 @@ class Creep:
             leg.move_by(0, 0, self.raise_leg)
             self.move()
         leg.move_to(
-            leg.home + (self.shift_x + self.dx *
-                        self.stride) * leg.x_dir + self.spread,
-            leg.home + (self.shift_y + self.dy *
-                        self.stride) * leg.y_dir + self.spread,
+            (self.shift_x + self.dx * self.stride) * leg.x_dir + self.spread,
+            (self.shift_y + self.dy * self.stride) * leg.y_dir + self.spread,
             self.raise_leg * self.raise_steps - self.height
         )
         self.move()

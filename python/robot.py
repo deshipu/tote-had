@@ -15,9 +15,11 @@ class Leg:
         self.x = 0
         self.y = 0
         self.z = 0
+        self.x_dir = x_dir
+        self.y_dir = y_dir
 
     def move_to(self, x, y, z):
-        data = ustruct.pack("Bbbbb", 4 * self.index, 1, x, y, z)
+        data = ustruct.pack("Bbbbb", 4 * self.index, 1, int(x), int(y), int(z))
         while True:
             try:
                 self.i2c.writeto(I2C_ADDRESS, data)
