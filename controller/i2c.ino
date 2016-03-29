@@ -26,7 +26,7 @@ void i2c_loop() {
     for (int leg = 0; leg < 3; ++leg) {
         if (regs[leg * 4]) {
             move_leg(leg, regs[leg * 4 + 1] + HOME,
-                          regs[leg * 4 + 2] + HOME ,
+                          regs[leg * 4 + 2] + HOME,
                           regs[leg * 4 + 3] - TIBIA);
             regs[leg * 4] = 0;
         }

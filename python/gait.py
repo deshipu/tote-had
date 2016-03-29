@@ -35,7 +35,8 @@ class Creep:
             dy = self.dy * leg.y_dir * self.speed
             leg.move_to(leg.x - dx, leg.y - dy, -self.height)
             #leg.rotate_by(-self.rotation * leg.x_dir * leg.y_dir / 2)
-        delay(25)
+        self.robot.update()
+        delay(250)
 
     def step(self, leg):
         dx = (leg.x_dir * self.shift - self.shift_x) / self.shift_steps

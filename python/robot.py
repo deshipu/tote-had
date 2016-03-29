@@ -1,4 +1,5 @@
 from machine import I2C, Pin
+from pyb import delay
 import ustruct
 import math
 
@@ -19,17 +20,9 @@ class Leg:
         self.y_dir = y_dir
 
     def move_to(self, x, y, z):
-        data = ustruct.pack("Bbbbb", 4 * self.index, 1, int(x), int(y), int(z))
-        while True:
-            try:
-                self.i2c.writeto(I2C_ADDRESS, data)
-            except OSError:
-                pass
-            else:
-                break
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x = min(127, max(-127, int(x)))
+        self.y = min(127, max(-127, int(y)))
+        self.z = min(127, max(-127, int(z)))
 
     def move_by(self, dx=0, dy=0, dz=0):
         self.move_to(self.x + dx, self.y + dy, self.z + dz)
@@ -59,3 +52,20 @@ class Robot:
     def rotate_by(self, radians):
         for leg in self.legs:
             leg.rotate_by(radians)
+
+    def update(self):
+        data = ustruct.pack(
+            "Bbbbbbbbbbbbbbbbb", 0,
+            1, self.legs[0].x, self.legs[0].y, self.legs[0].z,
+            1, self.legs[1].x, self.legs[1].y, self.legs[1].z,
+            1, self.legs[2].x, self.legs[2].y, self.legs[2].z,
+            1, self.legs[3].x, self.legs[3].y, self.legs[3].z,
+        )
+        while True:
+            try:
+                self.i2c.writeto(I2C_ADDRESS, data)
+            except OSError:
+                print("OSError!")
+            else:
+                break
+            delay(20)
