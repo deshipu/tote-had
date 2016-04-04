@@ -23,7 +23,7 @@ void receive(int bytes) {
 }
 
 void i2c_loop() {
-    for (int leg = 0; leg < 3; ++leg) {
+    for (int leg = 0; leg < 4; ++leg) {
         if (regs[leg * 4]) {
             move_leg(leg, regs[leg * 4 + 1] + HOME,
                           regs[leg * 4 + 2] + HOME,
