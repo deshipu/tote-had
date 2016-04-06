@@ -55,11 +55,11 @@ class Robot:
 
     def update(self):
         data = ustruct.pack(
-            "Bbbbbbbbbbbbbbbbb", 0,
-            1, self.legs[0].x, self.legs[0].y, self.legs[0].z,
-            1, self.legs[1].x, self.legs[1].y, self.legs[1].z,
-            1, self.legs[2].x, self.legs[2].y, self.legs[2].z,
-            1, self.legs[3].x, self.legs[3].y, self.legs[3].z,
+            "Bbbbbbbbbbbbb", 0,
+            self.legs[0].x, self.legs[0].y, self.legs[0].z,
+            self.legs[1].x, self.legs[1].y, self.legs[1].z,
+            self.legs[2].x, self.legs[2].y, self.legs[2].z,
+            self.legs[3].x, self.legs[3].y, self.legs[3].z,
         )
         while True:
             try:

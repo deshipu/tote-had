@@ -3,7 +3,7 @@
 
 
 const int SLAVE_ADDRESS = 0x09;
-const int MAX_REGS = 16;
+const int MAX_REGS = 12;
 
 volatile int8_t regs[MAX_REGS] = {};
 volatile uint8_t address;
@@ -24,11 +24,8 @@ void receive(int bytes) {
 
 void i2c_loop() {
     for (int leg = 0; leg < 4; ++leg) {
-        if (regs[leg * 4]) {
-            move_leg(leg, regs[leg * 4 + 1] + HOME,
-                          regs[leg * 4 + 2] + HOME,
-                          regs[leg * 4 + 3] - TIBIA);
-            regs[leg * 4] = 0;
-        }
+        move_leg(leg, regs[leg * 4 + 0] + HOME,
+                      regs[leg * 4 + 1] + HOME,
+                      regs[leg * 4 + 2] - TIBIA);
     }
 }
