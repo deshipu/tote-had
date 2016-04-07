@@ -10,7 +10,8 @@ IMAGES=\
 	body01.png
 
 SIZE=1280,960
-COLORSCHEME=BeforeDawn
+COLORSCHEME=Nature
+#BeforeDawn
 SCAD=openscad --imgsize=$(SIZE) --projection=p -m make --colorscheme=$(COLORSCHEME) --csglimit=100000
 
 all: images

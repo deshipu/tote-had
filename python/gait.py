@@ -72,11 +72,12 @@ class Creep:
         return (2, 0, 3, 1)   # forward
 
 
-    def run(self, steps):
-        for step in range(steps):
+    def run(self):
+        while True:
             leg = self.robot.legs[self.last_leg]
             for frame in self.step(leg):
                 self.move()
                 self.robot.update()
                 delay(40) # 25 FPS
+                yield
             self.last_leg = self.step_order()[self.last_leg]
