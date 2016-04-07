@@ -53,7 +53,9 @@ bool move_leg(unsigned char leg, double x, double y, double z) {
     double ankle = NAN;
     double knee = NAN;
     double hip = NAN;
-    if (leg_position[0] == x && leg_position[1] == y && leg_position[2] == z) {
+    if (leg_position[leg][0] == x &&
+        leg_position[leg][1] == y &&
+        leg_position[leg][2] == z) {
         return true;
     }
     leg_position[leg][0] = x;
