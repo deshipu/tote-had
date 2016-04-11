@@ -1,46 +1,57 @@
 use <parts.scad>
 
 
-module coxa(explode) {
-    SG90();
-    translate([18, -22 - explode, -28.75]) rotate([90, 180, 90]) SG90();
+module coxa(explode, colors=false) {
+    if (colors) {
+        SG90("Blue");
+        translate([18, -22 - explode, -28.75])
+            rotate([90, 180, 90]) SG90("Red");
+    } else {
+        SG90();
+        translate([18, -22 - explode, -28.75])
+            rotate([90, 180, 90]) SG90();
+    }
 }
 
-module tibia(explode) {
+module femur(explode) {
     SG90_single_horn();
     translate([17.6, 0, 0]) {
         translate([0, 0, 6 - explode]) rotate([0, 180, 0])
             SG90_double_horn();
         translate([-6, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-            SG90_horn_screw();
+            SG90_mount_screw();
         translate([-12, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-            SG90_horn_screw();
+            SG90_mount_screw();
         translate([6, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-            SG90_horn_screw();
+            SG90_mount_screw();
         translate([12, 0, 5 - explode * 1.5]) rotate([0, 180, 0])
-            SG90_horn_screw();
+            SG90_mount_screw();
     }
     translate([35.2, 0, 0]) rotate([0, 0, 180]) SG90_single_horn();
 }
 
-module femur(explode) {
-    SG90();
-    translate([-3.1 - explode, -20, -15]) rotate([-90, 0, 90]) SG90_double_horn();
+module tibia(explode, colors=false) {
+    if (colors) {
+        SG90("Green");
+    } else {
+        SG90();
+    }
+    translate([0, -20.3, -15 - explode]) rotate([0, 0, 90]) SG90_cross_horn();
+    translate([0, -19.8, -12.6 + explode]) SG90_mount_screw();
 }
 
 module leg(hip, knee, ankle, explode) {
     SG90_single_horn();
     translate([0, 0, explode]) SG90_horn_screw();
     translate([0, 0, -explode * 2]) rotate(hip - 40) {
-        rotate(0) SG90();
+        coxa(explode);
         translate([18, -22 - explode, -28.75]) rotate([90, 180, 90]) {
-            SG90();
             translate([0, 0, explode * 2]) rotate(knee) {
                 translate([0, 0, explode]) SG90_horn_screw();
-                tibia(explode);
+                femur(explode);
                 translate([35.2, 0, 0]) rotate([0, 0, 180]) {
                     translate([0, 0, explode]) SG90_horn_screw();
-                    translate([0, 0, -explode * 2]) rotate(ankle) femur(explode);
+                    translate([0, 0, -explode * 2]) rotate(ankle) tibia(explode);
                 }
             }
         }

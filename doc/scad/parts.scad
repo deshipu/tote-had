@@ -27,11 +27,11 @@ module capacitor() {
     }
 }
 
-module rc_servo_plug() {
+module rc_servo_plug(body_color="DimGray") {
     color("Orange") translate([1.27, 1.27, 12]) cylinder(r1=0.75, r2=0, h=20, $fn=4);
     color("Red") translate([1.27, 1.27 + 2.54, 12]) cylinder(r1=0.75, r2=0, h=20, $fn=4);
     color("Brown") translate([1.27, 1.27 + 2.54 * 2, 12]) cylinder(r1=0.75, r2=0, h=20, $fn=4);
-    color("DimGray") difference() {
+    color(body_color) difference() {
         cube([2.54, 2.54 * 3, 12]);
         translate([-1, -1, -1]) cube([1.25, 2.54 * 3 + 2, 7]);
         rotate(45) cube([1, 2, 12], center=true);
@@ -130,7 +130,7 @@ module SG90_mount_screw() {
     }
 }
 
-module SG90() {
+module SG90(body_color="SlateBlue") {
     servo_height = 22.6;
     servo_width = 12.2;
     servo_depth = 22.8;
@@ -138,13 +138,15 @@ module SG90() {
     servo_big_tip_r = 6.05;
 
     translate([-6.0, -16.9, -servo_height - 5.8 - 1]) union() {
-        color("RoyalBlue") union () {
+        color(body_color, 0.8) union () {
             cube([servo_width, servo_depth, servo_height]);
             translate([0, -4.8, 17.6]) {
                 difference () {
                     cube([12.0, 32.3, 2.4]);
-                    translate([6.0, 1.5, -0.1]) cylinder(r=2, h=2.6, $fn=8);
-                    translate([6.0, 30.8, -0.1]) cylinder(r=2, h=2.6, $fn=8);
+                    translate([6.0, 2.5, -0.1]) cylinder(r=1, h=2.6, $fn=6);
+                    translate([5.5, -0.5, -0.1]) cube([1, 3, 2.6]);
+                    translate([6.0, 29.8, -0.1]) cylinder(r=1, h=2.6, $fn=6);
+                    translate([5.5, 29.8, -0.1]) cube([1, 3, 2.6]);
                 }
             }
             translate([6.0, 16.9, servo_height]) {
@@ -166,14 +168,14 @@ module SG90() {
     }
 }
 
-module _SG90_horn_arm() {
+module _SG90_horn_arm(holes=6, base=3.3) {
     difference() {
         hull() {
-            translate([0, 0, 3.1]) cylinder(r=3.3, h=1.3, $fn=6);
-            translate([13.8, 0, 3.1]) cylinder(r=1.85, h=1.3, $fn=8);
+            translate([0, 0, 3.1]) cylinder(r=base, h=1.3, $fn=5);
+            translate([2*holes+1.8, 0, 3.1]) cylinder(r=1.85, h=1.3, $fn=8);
         }
-        for(i=[0:5]) {
-            translate([13.8 - i * 2,0,0]) {
+        for(i=[0:holes-1]) {
+            translate([2*holes + 1.8 - i * 2,0,0]) {
                 cylinder(r=0.6, h=8, $fn=6);
             }
         }
@@ -203,6 +205,25 @@ module SG90_double_horn(angle) {
                 cylinder(r=3.3, h=4.4, $fn=20);
                 _SG90_horn_arm();
                 rotate(180) _SG90_horn_arm();
+            }
+            translate([0,0,-1]) {
+                cylinder(r=2.275, h=3.2, $fn=6);
+                cylinder(r=1, h=8, $fn=10);
+                translate([0, 0, 4.4]) cylinder(r=2.35, h=2, $fn=10);
+            }
+        }
+    }
+}
+
+module SG90_cross_horn(angle) {
+    rotate(angle) color("Snow") {
+        difference() {
+            union() {
+                cylinder(r=3.3, h=4.4, $fn=20);
+                _SG90_horn_arm();
+                rotate(180) _SG90_horn_arm(7, 3.9);
+                rotate(90) _SG90_horn_arm(2, 1.85);
+                rotate(-90) _SG90_horn_arm(2, 1.85);
             }
             translate([0,0,-1]) {
                 cylinder(r=2.275, h=3.2, $fn=6);

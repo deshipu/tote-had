@@ -7,11 +7,12 @@ IMAGES=\
 	leg04.png \
 	leg05.png \
 	leg06.png \
+	leg07.png \
+	foot01.png \
 	body01.png
 
 SIZE=1280,960
-COLORSCHEME=Nature
-#BeforeDawn
+COLORSCHEME=BeforeDawn
 SCAD=openscad --imgsize=$(SIZE) --projection=p -m make --colorscheme=$(COLORSCHEME) --csglimit=100000
 
 all: images
@@ -36,6 +37,9 @@ leg01.png: leg01.scad
 leg02.png: leg02.scad
 	$(SCAD) -o $@ $< --camera=-0.16,-8.64,-22.91,302.30,0.00,91.50,172.84
 
+foot01.png: foot01.scad
+	$(SCAD) -o $@ $< --camera=0,0,0,231,0,324,82
+
 leg03.png: leg03.scad
 	$(SCAD) -o $@ $< --camera=20.82,7.64,-8.29,227.90,0.00,340.20,140
 
@@ -46,6 +50,9 @@ leg05.png: leg05.scad
 	$(SCAD) -o $@ $< --camera=0,0,0,41,0,191,172
 
 leg06.png: leg06.scad
+	$(SCAD) -o $@ $< --camera=25,25.69,-25.98,53,180,222,292
+
+leg07.png: leg07.scad
 	$(SCAD) -o $@ $< --camera=25,25.69,-25.98,53,0,202,292
 
 body01.png: body01.scad
