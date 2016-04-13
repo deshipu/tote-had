@@ -37,7 +37,7 @@ class Leg:
 
 class Robot:
     def __init__(self):
-        self.i2c = I2C(sda=Pin(0), scl=Pin(2))
+        self.i2c = I2C(sda=Pin(0), scl=Pin(2), freq=10000)
         self.legs = (
             Leg(self.i2c, 0, -1,  1),
             Leg(self.i2c, 1, -1, -1),
